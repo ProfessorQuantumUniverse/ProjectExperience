@@ -312,6 +312,17 @@
             main { padding-top: 0; }
         }
 
+        /* ===== SCROLL-TRIGGERED FADE-IN ===== */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(30px); /* Slightly more pronounced effect */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Smoother and slightly longer transition */
+        }
+
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="loading">
@@ -352,7 +363,7 @@
 
     <main>
         <!-- 3D MODELL-SEKTION -->
-        <section id="modell" class="model-viewer-section">
+        <section id="modell" class="model-viewer-section fade-in-on-scroll">
             <h2>Interaktives 3D-Modell</h2>
             <p>Erkunde das CAD-Modell direkt im Browser. Zoome, drehe und entdecke jedes Detail der Konstruktion.</p>
             <div class="iframe-container">
@@ -363,7 +374,7 @@
     </main>
 
     <!-- FOOTER MIT SOCIAL LINKS -->
-    <footer class="site-footer">
+    <footer class="site-footer fade-in-on-scroll">
         <h4 class="footer-title">Connect</h4>
         <div class="social-links">
             <!-- HIER DEINE LINKS EINFÜGEN -->
@@ -457,6 +468,27 @@
         initParticles();
         animateParticles();
         window.addEventListener('resize', () => { canvas.width=innerWidth; canvas.height=innerHeight; initParticles(); });
+
+        // 4. Scroll-triggered Fade-in
+        const fadeInElements = document.querySelectorAll('.fade-in-on-scroll');
+        const observerOptions = {
+            root: null, // relative to document viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of item has to be visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(el => {
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
