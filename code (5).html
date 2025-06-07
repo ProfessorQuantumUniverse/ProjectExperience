@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Gravitas | Eine 3D Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --primary-text-color: #e0e0e0;
+            --secondary-text-color: #a0a0a0;
+            --accent-color: #00f2ea;
+            --spotlight-color: rgba(0, 242, 234, 0.1);
+            --border-color: #2a2a2a;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--primary-text-color);
+            font-family: var(--font-family);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        body.loading {
+            overflow: hidden;
+        }
+
+        /* ===== NEU: PRELOADER ===== */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #preloader .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        body.loaded #preloader {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== CURSOR SPOTLIGHT ===== */
+        .cursor-spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 100;
+            background: radial-gradient(
+                circle 350px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                var(--spotlight-color),
+                transparent 80%
+            );
+            transition: background 0.2s ease-out;
+        }
+
+        /* ===== HERO SECTION & CINEMATIC SCROLL ===== */
+        .hero-container {
+            height: 200vh; /* Gibt Raum für den Scroll-Effekt */
+            position: relative;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: sticky; /* Das ist der Schlüssel für den Effekt */
+            top: 0;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            transform: scale(1.1); /* leichter Zoom am Anfang */
+            transition: transform 0.5s ease;
+        }
+
+        .video-background::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .video-background video {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        
+        #particle-canvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+        }
+        
+        /* ===== NEU: INTERAKTIVER TEXT-GLOW ===== */
+        .main-headline {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            position: relative;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .main-headline .glow-span {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(
+                circle 150px at var(--glow-x, 50%) var(--glow-y, 50%),
+                var(--primary-text-color),
+                transparent 60%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .main-headline:hover .glow-span {
+            opacity: 1;
+        }
+
+        .sub-headline {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--secondary-text-color);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 242, 234, 0.2);
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            color: var(--accent-color);
+            animation: pulse 2s infinite 1s;
+            z-index: 2;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, 10px) scale(1.1); opacity: 0.7; }
+        }
+
+        /* ===== MAIN CONTENT WRAPPER ===== */
+        main {
+            position: relative;
+            z-index: 10;
+            background: var(--bg-color);
+            padding-top: 10vh; /* Etwas Abstand zum Start */
+        }
+        
+        /* ===== 3D MODELL-SEKTION ===== */
+        .model-viewer-section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .model-viewer-section h2 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .model-viewer-section p {
+            color: var(--secondary-text-color);
+            max-width: 600px;
+            margin: 0 auto 50px auto;
+        }
+        
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            background-color: #050505;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .iframe-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+
+        /* ===== FOOTER & SOCIALS ===== */
+        .site-footer {
+            text-align: center;
+            padding: 80px 20px 60px;
+            color: var(--secondary-text-color);
+            font-size: 0.9rem;
+        }
+        
+        .footer-title {
+            color: var(--primary-text-color);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px; /* Mehr Abstand */
+        }
+
+        .social-links a {
+            color: var(--secondary-text-color);
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+            transform: translateY(-8px); /* Stärkerer Pop-up Effekt */
+        }
+
+        .social-links svg {
+            width: 36px; /* Deutlich größer */
+            height: 36px;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .cursor-spotlight { display: none; }
+            .main-headline { font-size: 2.8rem; }
+            .hero-container { height: auto; } /* Deaktiviert Scroll-Effekt auf Mobile */
+            .hero { position: relative; }
+            main { padding-top: 0; }
+        }
+
+    </style>
+</head>
+<body class="loading">
+
+    <!-- NEU: Preloader -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Effekt-Layer -->
+    <div class="cursor-spotlight"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- CINEMATIC SCROLL CONTAINER -->
+    <div class="hero-container">
+        <header class="hero">
+            <div class="video-background">
+                <!-- HIER DEIN VIDEO EINFÜGEN -->
+                <video autoplay loop muted playsinline poster="placeholder-image.jpg">
+                    <source src="DEIN_VIDEO.mp4" type="video/mp4">
+                    Dein Browser unterstützt keine Videos.
+                </video>
+            </div>
+            <div class="hero-content">
+                <h1 class="main-headline">
+                    Vom digitalen Entwurf zur physikalischen Realität.
+                    <span class="glow-span">Vom digitalen Entwurf zur physikalischen Realität.</span>
+                </h1>
+                <p class="sub-headline">Ein Projekt über Präzisionshandwerk und die fundamentalen Kräfte des Universums.</p>
+                <!-- HIER DEINEN PDF-LINK EINFÜGEN -->
+                <a href="DEIN_VORTRAG.pdf" class="cta-button" download>Vortrag herunterladen</a>
+            </div>
+            <a href="#modell" class="scroll-down">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+            </a>
+        </header>
+    </div>
+
+    <main>
+        <!-- 3D MODELL-SEKTION -->
+        <section id="modell" class="model-viewer-section">
+            <h2>Interaktives 3D-Modell</h2>
+            <p>Erkunde das CAD-Modell direkt im Browser. Zoome, drehe und entdecke jedes Detail der Konstruktion.</p>
+            <div class="iframe-container">
+                <!-- HIER DEIN SHAPR3D IFRAME EINFÜGEN -->
+                <iframe title="Shapr3D Embed" src="DEIN_SHAPR3D_IFRAME_LINK" frameborder="0"></iframe>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER MIT SOCIAL LINKS -->
+    <footer class="site-footer">
+        <h4 class="footer-title">Connect</h4>
+        <div class="social-links">
+            <!-- HIER DEINE LINKS EINFÜGEN -->
+            <a href="DEINE_WEBSEITE_URL" target="_blank" title="Website">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            </a>
+            <a href="DEIN_YOUTUBE_LINK" target="_blank" title="YouTube">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+            </a>
+            <a href="DEIN_LINKEDIN_ODER_ANDERER_LINK" target="_blank" title="LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+        </div>
+        <p style="margin-top: 40px; font-size: 0.8em;">Ein Projekt von [Dein Name] | 2024</p>
+    </footer>
+
+    <script>
+        // Preloader Logic
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+            document.body.classList.remove('loading');
+        });
+        
+        // --- Interaktive Effekte ---
+
+        // 1. Cinematic Scroll
+        const heroContent = document.querySelector('.hero-content');
+        const videoBg = document.querySelector('.video-background');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const heroHeight = document.querySelector('.hero').offsetHeight;
+            const scrollPercent = Math.min(scrollY / heroHeight, 1);
+            
+            if (window.innerWidth > 768) { // Nur auf Desktop
+                const scale = 1 - (scrollPercent * 0.2);
+                const opacity = 1 - (scrollPercent * 1.5);
+                
+                heroContent.style.transform = `scale(${scale})`;
+                heroContent.style.opacity = opacity;
+                
+                const videoScale = 1.1 - (scrollPercent * 0.1);
+                videoBg.style.transform = `scale(${videoScale})`;
+            }
+        });
+
+        // 2. Maus-Effekte (Spotlight & Text-Glow)
+        const mainHeadline = document.querySelector('.main-headline');
+        document.addEventListener('mousemove', e => {
+            // Allgemeiner Spotlight
+            document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+            document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+            
+            // Text-Glow
+            const rect = mainHeadline.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            mainHeadline.style.setProperty('--glow-x', `${x}px`);
+            mainHeadline.style.setProperty('--glow-y', `${y}px`);
+        });
+
+        // 3. Partikel-Effekt (unverändert)
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particlesArray = [];
+
+        class Particle {
+            constructor(x, y, dX, dY, size, color) { this.x=x; this.y=y; this.directionX=dX; this.directionY=dY; this.size=size; this.color=color; }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); ctx.fillStyle=this.color; ctx.fill(); }
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                this.x += this.directionX; this.y += this.directionY; this.draw();
+            }
+        }
+        function initParticles() {
+            particlesArray = [];
+            let num = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < num; i++) {
+                let size = (Math.random() * 2) + 1, x = Math.random() * innerWidth, y = Math.random() * innerHeight;
+                let dX = (Math.random() * .4) - .2, dY = (Math.random() * .4) - .2;
+                particlesArray.push(new Particle(x, y, dX, dY, size, 'rgba(0, 242, 234, 0.3)'));
+            }
+        }
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0,0,innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) particlesArray[i].update();
+        }
+        initParticles();
+        animateParticles();
+        window.addEventListener('resize', () => { canvas.width=innerWidth; canvas.height=innerHeight; initParticles(); });
+    </script>
+</body>
+</html>
