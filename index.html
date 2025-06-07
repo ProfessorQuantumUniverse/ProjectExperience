@@ -329,6 +329,38 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        .coded-by {
+          color: var(--accent-color);
+          text-shadow: 0 0 8px rgba(0, 242, 234, 0.5); /* Using the accent color with some transparency */
+          font-weight: 500; /* Slightly bolder */
+          display: inline-block; /* To allow hover effects if needed on the span itself */
+          transition: transform 0.3s ease; /* For potential hover effect on span */
+        }
+
+        .coded-by:hover {
+          transform: scale(1.03); /* Slight zoom on hover for the whole span */
+        }
+
+        .footer-attribution {
+          text-align: center;
+          margin-top: 30px; /* Added margin-top for spacing from social links */
+          margin-bottom: 15px; /* Spacing to the copyright line */
+          padding-top: 15px; /* Padding above the text */
+          border-top: 1px solid var(--border-color); /* Separator line */
+        }
+
+        .code-icon { /* Styles for the new SVG icon */
+          vertical-align: middle;
+          margin-left: 8px; /* Increased spacing for better visual separation */
+          opacity: 0.7;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .coded-by:hover .code-icon {
+          opacity: 1;
+          transform: rotate(10deg); /* Slight rotation for a playful effect */
+        }
     </style>
 </head>
 <body class="loading">
@@ -394,7 +426,10 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
             </a>
         </div>
-        <p style="margin-top: 40px; font-size: 0.8em;">Ein Projekt von [Dein Name] | 2024</p>
+        <div class="footer-attribution">
+            <span class="coded-by">Gecodet von Lorenzo Bay-Müller <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="code-icon"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></span>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.8em;">Ein Projekt von [Dein Name] | 2024</p>
     </footer>
 
     <script>
