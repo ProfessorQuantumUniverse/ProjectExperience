@@ -150,7 +150,15 @@
             line-height: 1.2;
             margin-bottom: 1rem;
             position: relative;
-            color: rgba(255, 255, 255, 0.8);
+            /* color: rgba(255, 255, 255, 0.8); Original color, will be handled by animation */
+            animation: colorCycle 15s infinite linear;
+        }
+
+        @keyframes colorCycle {
+            0% { color: #e0e0e0; } /* Similar to original */
+            33% { color: var(--accent-color); }
+            66% { color: #c0c0ff; } /* Light lavender */
+            100% { color: #e0e0e0; }
         }
 
         .main-headline .glow-span {
@@ -164,12 +172,18 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            opacity: 0;
-            transition: opacity 0.3s;
+            opacity: 1; /* Changed from 0 to 1 */
+            /* transition: opacity 0.3s; Removed */
+            animation: pulsatingGlow 3s infinite ease-in-out;
         }
 
-        .main-headline:hover .glow-span {
+        /* .main-headline:hover .glow-span { Removed, opacity is now always 1
             opacity: 1;
+        } */
+
+        @keyframes pulsatingGlow {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
         }
 
         .sub-headline {
