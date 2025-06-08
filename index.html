@@ -397,14 +397,37 @@
         </header>
     </div>
 
-    <main>
+<main>
         <!-- 3D MODELL-SEKTION -->
         <section id="modell" class="model-viewer-section fade-in-on-scroll">
             <h2>Interaktives 3D-Modell</h2>
             <p>Erkunde das CAD-Modell direkt im Browser. Zoome, drehe und entdecke jedes Detail der Konstruktion.</p>
             <div class="iframe-container">
                 <!-- HIER DEIN SHAPR3D IFRAME EINFÜGEN -->
-                <iframe title="Shapr3D Embed" src="DEIN_SHAPR3D_IFRAME_LINK" frameborder="0"></iframe>
+                <model-viewer src="https://drive.google.com/uc?export=download&id=159yBhaDIXnjiE8YUnBJEXDTg5eyaz1cq" ar ar-modes="webxr scene-viewer quick-look" camera-controls tone-mapping="neutral" poster="poster.webp" shadow-intensity="1.15" exposure="0.95" environment-image="legacy" shadow-softness="1" auto-rotate camera-orbit="-67.47deg 67.98deg 3.821m" field-of-view="30deg">
+                <button class="Hotspot" slot="hotspot-2" data-position="-0.02763049728038758m 0.33526846766471907m 0.0617749639373219m" data-normal="0m 1m 0m" data-visibility-attribute="visible">
+                    <div class="HotspotAnnotation">Arbeitsplatte</div>
+                </button><button class="Hotspot" slot="hotspot-3" data-position="0.3794000148773189m 0.24348128468466834m 0.003311596319966359m" data-normal="1m 0m 0m" data-visibility-attribute="visible">
+                    <div class="HotspotAnnotation">Steckdosen</div>
+                </button><button class="Hotspot" slot="hotspot-4" data-position="-0.048269406361791445m 0.5009955167770388m -0.3507155721314179m" data-normal="0m 1m 0m" data-visibility-attribute="visible">
+                    <div class="HotspotAnnotation">Hubregal</div>
+                </button><button class="Hotspot" slot="hotspot-5" data-position="0.07621829811615943m 0.006897058337495654m 0.4920000433921814m" data-normal="0m 0m 1m" data-visibility-attribute="visible">
+                    <div class="HotspotAnnotation">Schubladen</div>
+                </button><button class="Hotspot" slot="hotspot-7" data-position="-0.28225162598029474m -0.7001928543181329m 0.472578762463848m" data-normal="0m -0.18645936055848947m 0.9824626745378775m" data-visibility-attribute="visible">
+                    <div class="HotspotAnnotation">Räder</div>
+                </button><button class="Hotspot" slot="hotspot-8" data-position="-0.06422215804988918m 0.7371631044259077m -0.12194904175695617m" data-normal="-0.0011143386442726616m 0m 0.9999993791245003m" data-visibility-attribute="visible">
+                    <div class="HotspotAnnotation">LED-Licht</div>
+                </button>
+                <div class="progress-bar hide" slot="progress-bar">
+                    <div class="update-bar"></div>
+                </div>
+                <button slot="ar-button" id="ar-button">
+                    View in your ar
+                </button>
+                <div id="ar-prompt">
+                    <img src="https://modelviewer.dev/shared-assets/icons/hand.png">
+                </div>
+                </model-viewer>
             </div>
         </section>
     </main>
