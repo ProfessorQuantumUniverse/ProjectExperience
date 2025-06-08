@@ -312,10 +312,102 @@
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
             .cursor-spotlight { display: none; }
-            .main-headline { font-size: 2.8rem; }
+            /* .main-headline { font-size: 2.8rem; } /* Original, wird unten überschrieben */
             .hero-container { height: auto; } /* Deaktiviert Scroll-Effekt auf Mobile */
-            .hero { position: relative; }
-            main { padding-top: 0; }
+            .hero {
+                position: relative;
+                padding: 0 15px; /* Hero Section Anpassung */
+            }
+            .hero-content {
+                /* Ggf. weitere Anpassungen hier, falls .hero padding nicht reicht */
+            }
+            .main-headline {
+                font-size: 2.2rem; /* Hero Section Anpassung */
+            }
+            .sub-headline {
+                font-size: 1rem; /* Hero Section Anpassung */
+                margin-bottom: 2rem; /* Hero Section Anpassung */
+            }
+            .cta-button {
+                padding: 12px 30px; /* Hero Section Anpassung */
+                font-size: 1rem; /* Hero Section Anpassung */
+            }
+            .scroll-down svg {
+                width: 20px; /* Hero Section Anpassung */
+                height: 20px; /* Hero Section Anpassung */
+                /* bottom: 20px; /* Ggf. anpassen, falls nötig */
+            }
+
+            /* 3D Model Section Anpassungen */
+            .model-viewer-section {
+                padding: 60px 15px; /* 3D Model Section Anpassung */
+            }
+            .model-viewer-section h2 {
+                font-size: 2rem; /* 3D Model Section Anpassung */
+            }
+            .model-viewer-section p {
+                font-size: 0.9rem; /* 3D Model Section Anpassung */
+                margin-bottom: 30px; /* 3D Model Section Anpassung */
+            }
+
+            /* Footer Anpassungen */
+            .site-footer {
+                padding: 60px 15px 40px; /* Footer Anpassung */
+            }
+            .site-footer p { /* Allgemeine p im Footer */
+                font-size: 0.8rem; /* Footer Anpassung */
+            }
+            .footer-title {
+                font-size: 1rem; /* Footer Anpassung */
+            }
+            .social-links {
+                gap: 25px; /* Footer Anpassung */
+            }
+            .social-links svg {
+                width: 30px; /* Footer Anpassung */
+                height: 30px; /* Footer Anpassung */
+            }
+            .footer-attribution {
+                margin-top: 25px; /* Footer Anpassung */
+                padding-top: 15px; /* Footer Anpassung */
+            }
+
+            /* General Adjustments */
+            main {
+                padding-top: 0;
+                padding-left: 15px; /* General Adjustments */
+                padding-right: 15px; /* General Adjustments */
+            }
+        }
+
+        /* ===== NEU: RESPONSIVE DESIGN FÜR KLEINERE BILDSCHIRME (max-width: 480px) ===== */
+        @media (max-width: 480px) {
+            /* Hero Section Anpassungen */
+            .main-headline {
+                font-size: 1.8rem;
+            }
+            .sub-headline {
+                font-size: 0.9rem;
+            }
+            .cta-button {
+                padding: 10px 25px;
+                font-size: 0.9rem;
+            }
+
+            /* 3D Model Section Anpassungen */
+            .model-viewer-section h2 {
+                font-size: 1.6rem;
+            }
+            .model-viewer-section p {
+                font-size: 0.85rem;
+            }
+
+            /* Footer Anpassungen */
+            /* Consider .social-links { flex-direction: column; align-items: center; } if wrapping is awkward */
+            .social-links svg {
+                width: 28px;
+                height: 28px;
+            }
         }
 
         /* ===== SCROLL-TRIGGERED FADE-IN ===== */
