@@ -313,8 +313,6 @@
         @media (max-width: 768px) {
             .cursor-spotlight { display: none; }
             .main-headline { font-size: 2.8rem; }
-            .hero-container { height: auto; } /* Deaktiviert Scroll-Effekt auf Mobile */
-            .hero { position: relative; }
             main { padding-top: 0; }
         }
 
@@ -449,16 +447,14 @@
             const heroHeight = document.querySelector('.hero').offsetHeight;
             const scrollPercent = Math.min(scrollY / heroHeight, 1);
             
-            if (window.innerWidth > 768) { // Nur auf Desktop
-                const scale = 1 - (scrollPercent * 0.2);
-                const opacity = 1 - (scrollPercent * 1.5);
-                
-                heroContent.style.transform = `scale(${scale})`;
-                heroContent.style.opacity = opacity;
-                
-                const videoScale = 1.1 - (scrollPercent * 0.1);
-                videoBg.style.transform = `scale(${videoScale})`;
-            }
+            const scale = 1 - (scrollPercent * 0.2);
+            const opacity = 1 - (scrollPercent * 1.5);
+
+            heroContent.style.transform = `scale(${scale})`;
+            heroContent.style.opacity = opacity;
+
+            const videoScale = 1.1 - (scrollPercent * 0.1);
+            videoBg.style.transform = `scale(${videoScale})`;
         });
 
         // 2. Maus-Effekte (Spotlight & Text-Glow)
