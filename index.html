@@ -261,18 +261,26 @@
         }
         
         .iframe-container {
-            position: relative;
             width: 100%;
-            padding-top: 56.25%;
             background-color: #050505;
             border-radius: 12px;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
             border: 1px solid var(--border-color);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
 
         .iframe-container iframe {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+        }
+
+        model-viewer {
+            width: 90%; /* Or another large percentage */
+            height: 90%; /* Or another large percentage */
+            display: block; /* Or 'flex' if it needs to contain other elements */
         }
 
         /* ===== FOOTER & SOCIALS ===== */
@@ -420,9 +428,6 @@
                 </button><button class="Hotspot" slot="hotspot-8" data-position="-0.06422215804988918m 0.7371631044259077m -0.12194904175695617m" data-normal="-0.0011143386442726616m 0m 0.9999993791245003m" data-visibility-attribute="visible">
                     <div class="HotspotAnnotation">LED-Licht</div>
                 </button>
-                <div class="progress-bar hide" slot="progress-bar">
-                    <div class="update-bar"></div>
-                </div>
                 <button slot="ar-button" id="ar-button">
                     View in your ar
                 </button>
