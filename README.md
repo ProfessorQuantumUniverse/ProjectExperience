@@ -1,3 +1,9 @@
+> [!NOTE]
+> **Archived – no longer maintained.** The project this site presents is finished; the website stays online.
+> The code stays available for reference, but there will be no updates or security fixes.
+>
+> *Archiviert – wird nicht mehr gepflegt. Das vorgestellte Projekt ist abgeschlossen, die Website bleibt online.*
+
 <div align="center">
 
 # 🌍 Projekt Gravitas
